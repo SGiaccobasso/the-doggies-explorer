@@ -150,7 +150,7 @@ const searchRandomToken = () => {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #1d323f;
+  background-color: #273549;
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
