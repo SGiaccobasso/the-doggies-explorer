@@ -84,19 +84,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import axios from "axios";
 import { ref } from "vue";
-
 import contract from "~/services/contractService";
 import Typography from "~/components/common/Typography.vue";
 import Description from "./Description.vue";
 import Button from "./common/Button.vue";
+import type { TokenData } from "~/typings/types.ts";
 
-const tokenIndex = ref(0);
-const tokenData = ref(null);
-const error = ref(null);
-const isLoading = ref(false);
+const tokenIndex = ref<number>(0);
+const tokenData = ref<TokenData | null>(null);
+const error = ref<string | null>(null);
+const isLoading = ref<boolean>(false);
 
 const getTokenURI = async () => {
   try {
@@ -107,7 +107,9 @@ const getTokenURI = async () => {
 
     isLoading.value = true;
 
-    const result = await contract.methods.tokenURI(tokenIndex.value).call();
+    const result: string = await contract.methods
+      .tokenURI(tokenIndex.value)
+      .call();
     await fetchTokenData(result);
 
     error.value = null;
@@ -118,7 +120,7 @@ const getTokenURI = async () => {
   }
 };
 
-const fetchTokenData = async (URI) => {
+const fetchTokenData = async (URI: string) => {
   try {
     const response = await axios.get(URI);
     tokenData.value = {
