@@ -6,7 +6,6 @@
 
 <script>
 import { computed } from "vue";
-import Typography from "./common/Typography.vue";
 
 export default {
   props: {
