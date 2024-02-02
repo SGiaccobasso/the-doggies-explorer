@@ -15,7 +15,7 @@ export default {
 <style scoped>
 .h1 {
   font-weight: bold;
-  font-size: 32px;
+  font-size: 30px;
   margin-bottom: 32px;
   margin-top: 8px;
 }

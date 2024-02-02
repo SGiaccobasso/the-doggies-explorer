@@ -153,6 +153,7 @@ const searchRandomToken = () => {
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
+  border-radius: 6px;
 }
 
 .dog-explorer__input {
