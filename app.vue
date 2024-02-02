@@ -1,5 +1,3 @@
 <template>
-  <div>
-    <Explorer />
-  </div>
+  <Explorer />
 </template>
