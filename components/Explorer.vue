@@ -55,8 +55,12 @@
       <table class="dog-explorer__token-traits-table">
         <thead>
           <tr>
-            <th class="dog-explorer__token-trait-type-header">Trait</th>
-            <th class="dog-explorer__token-trait-value-header">Value</th>
+            <th class="dog-explorer__token-trait-type-header">
+              <Typography variant="strong">Trait</Typography>
+            </th>
+            <th class="dog-explorer__token-trait-value-header">
+              <Typography variant="strong">Value</Typography>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -138,6 +142,7 @@ const searchRandomToken = () => {
 
 <style scoped>
 .dog-explorer {
+  font-family: Inter;
   color: white;
   display: flex;
   align-items: center;
