@@ -87,6 +87,7 @@
 <script setup lang="ts">
 import axios from "axios";
 import { ref } from "vue";
+
 import contract from "~/services/contractService";
 import Typography from "~/components/common/Typography.vue";
 import Description from "./Description.vue";

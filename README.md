@@ -1,8 +1,10 @@
-# The Doggies Explorer
+# The Doggies Explorer 🐶
 
-Test project written in Nuxt.
+Mobile-first test project written in Nuxt 3.
 
-Get info from The Doggies NFT collection by entering a token ID.
+Get info from The Doggies NFT collection by entering a token ID, or make a random search.
+
+Third party libraries used: Web3.js, axios.
 
 ## Setup
 
