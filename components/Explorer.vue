@@ -1,7 +1,6 @@
 <template>
   <div class="dog-explorer">
-    <h1 class="dog-explorer__title">The Doggies Explorer</h1>
-    <label for="tokenIndex" class="dog-explorer__label">Token ID:</label>
+    <Typography variant="h1"> The Doggies Explorer </Typography>
     <div class="dog-explorer__input-container">
       <input
         id="tokenIndex"
@@ -9,63 +8,86 @@
         v-model="tokenIndex"
         min="0"
         max="9999"
-        placeholder="Enter token index"
         class="dog-explorer__input"
       />
-      <button
-        @click="getTokenURI"
-        :disabled="isLoading"
-        class="dog-explorer__button"
-      >
-        Get Token By ID
-      </button>
+      <Button @click="getTokenURI" :disabled="isLoading"> Search By ID </Button>
+      <Button @click="searchRandomToken" :disabled="isLoading">
+        Random Search
+      </Button>
     </div>
-    <button
-      @click="searchRandomToken"
-      :disabled="isLoading"
-      class="dog-explorer__button"
-    >
-      Search Random Token
-    </button>
 
-    <div v-if="isLoading" class="dog-explorer__loading">Loading...</div>
+    <div v-if="error && !isLoading" class="dog-explorer__error">
+      <Typography variant="error">
+        {{ error }}
+      </Typography>
+    </div>
+
+    <div v-if="isLoading" class="dog-explorer__loading">
+      <Typography variant="p">Loading...</Typography>
+    </div>
+
+    <div v-if="!tokenData" class="dog-explorer__home">
+      <img
+        class="dog-explorer__gif"
+        src="https://i.seadn.io/gae/ufumJQN9NwT0U5jh_suJP5cLRIjyE38hirVdBChQLe-ghnt1RomIARfxSNmR6fdMQC0OIgjVQHhhduUfcxiRVrfHpihrXSW-SU5J?auto=format&dpr=1&w=256"
+      />
+      <Typography variant="h2">
+        🐶 The Doggies - Snoop Dogg Avatars 🐶
+      </Typography>
+      <Typography variant="p">
+        10,000 metaverse-ready Avatars, playable in The Sandbox. Each Doggy has
+        been generated from over 150+ traits, curated by Snoop Dogg himself.
+        Owning a Doggy provides access to a playable The Sandbox avatar, as well
+        as access to future features inside the metaverse.
+      </Typography>
+    </div>
 
     <div v-if="tokenData" class="dog-explorer__token-info">
-      <h2 class="dog-explorer__token-name">{{ tokenData.name }}</h2>
-      <p class="dog-explorer__token-description">
-        Description: {{ tokenData.description }}
-      </p>
+      <Typography variant="h2">
+        {{ tokenData.name }}
+      </Typography>
       <img
         :src="tokenData.thumbnail"
         alt="Token Thumbnail"
         class="dog-explorer__token-thumbnail"
       />
-
-      <h3 class="dog-explorer__token-traits-title">Traits:</h3>
-      <ul class="dog-explorer__token-traits-list">
-        <li
-          v-for="trait in tokenData.traits"
-          :key="trait.trait_type"
-          class="dog-explorer__token-trait"
-        >
-          <strong class="dog-explorer__token-trait-type"
-            >{{ trait.trait_type }}:</strong
+      <Description :paragraph="tokenData.description" />
+      <table class="dog-explorer__token-traits-table">
+        <thead>
+          <tr>
+            <th class="dog-explorer__token-trait-type-header">Trait</th>
+            <th class="dog-explorer__token-trait-value-header">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="trait in tokenData.traits"
+            :key="trait.trait_type"
+            class="dog-explorer__token-trait"
           >
-          {{ trait.value }}
-        </li>
-      </ul>
-    </div>
-
-    <div v-if="error" class="dog-explorer__error">
-      <p class="dog-explorer__error-message">{{ error }}</p>
+            <td class="dog-explorer__token-trait-type">
+              <Typography variant="strong">{{ trait.trait_type }}</Typography>
+            </td>
+            <td class="dog-explorer__token-trait-value">
+              <Typography variant="p">
+                {{ trait.value ? trait.value : "-" }}
+              </Typography>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
 <script setup>
-import contract from "~/services/contractService";
 import axios from "axios";
 import { ref } from "vue";
+
+import contract from "~/services/contractService";
+import Typography from "~/components/common/Typography.vue";
+import Description from "./Description.vue";
+import Button from "./common/Button.vue";
 
 const tokenIndex = ref(0);
 const tokenData = ref(null);
@@ -75,7 +97,7 @@ const isLoading = ref(false);
 const getTokenURI = async () => {
   try {
     if (tokenIndex.value < 0 || tokenIndex.value > 9999) {
-      error.value = "Please enter a number between 0 and 9999.";
+      error.value = " ⚠️ Please enter a number between 0 and 9999.";
       return;
     }
 
@@ -120,86 +142,75 @@ const searchRandomToken = () => {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #89cff3;
+  background-color: #1d323f;
   max-width: 500px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.dog-explorer__title {
-  font-size: 24px;
-  margin-bottom: 16px;
-}
-
-.dog-explorer__label {
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
-}
-
 .dog-explorer__input {
+  border-radius: 6px;
   padding: 8px;
-  margin-bottom: 16px;
-  width: 70%;
+  width: 50%;
 }
 
 .dog-explorer__input-container {
   display: flex;
   width: 100%;
-}
-
-.dog-explorer__button {
-  padding: 10px;
-  margin-bottom: 16px;
-  background-color: #3498db;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  display: block;
-}
-
-.dog-explorer__loading {
-  color: #3498db;
-  margin-bottom: 16px;
+  gap: 8px;
 }
 
 .dog-explorer__token-info {
   margin-top: 16px;
-  text-align: center;
+  text-align: left;
 }
 
-.dog-explorer__token-name {
-  font-size: 20px;
-  margin-bottom: 8px;
+.dog-explorer__home {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dog-explorer__gif {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
 }
 
 .dog-explorer__token-thumbnail {
   max-width: 100%;
   height: auto;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.dog-explorer__token-traits-title {
-  font-size: 18px;
-  margin-bottom: 8px;
+.dog-explorer__token-traits-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 32px;
 }
 
-.dog-explorer__token-traits-list {
-  list-style-type: none;
-  padding: 0;
+.dog-explorer__loading {
+  margin-top: 16px;
 }
 
-.dog-explorer__token-trait {
-  margin-bottom: 8px;
+.dog-explorer__token-traits-table th,
+.dog-explorer__token-traits-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #3282b8;
 }
 
-.dog-explorer__token-trait-type {
-  margin-right: 8px;
-  font-weight: bold;
+.dog-explorer__token-traits-table th {
+  background-color: #3282b8;
+  color: #fff;
 }
 
-.dog-explorer__error {
-  color: red;
+.dog-explorer__token-trait-value {
+  padding: 12px;
+}
+
+.dog-explorer__token-traits-table tbody tr:last-child td {
+  border-bottom: none;
 }
 </style>
